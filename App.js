@@ -12,21 +12,28 @@ import TodoInput from './components/todoInput';
 
 export default function App() {
   const [todos, setTodos] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const addTodoHandler = (value) => {
     setTodos((previousValue) => [
       ...previousValue,
       { id: Math.random().toString(), value: value },
     ]);
+    setShowModal(false)
   };
 
   const deleteHandler = (id) => {
     setTodos((initialTodos) => initialTodos.filter((todo) => todo.id !== id));
   };
 
+  const cancelModalHandler = () => {
+    setShowModal(false)
+  }
+
   return (
     <View style={styles.container}>
-      <TodoInput onAddTodo={addTodoHandler} />
+      <Button title='Add Todo' onPress={()=> setShowModal(true)} />
+      <TodoInput onAddTodo={addTodoHandler} showModal={showModal} closeModal={cancelModalHandler} />
       <View style={styles.todosContainer}>
         <Text style={styles.title}> Todos </Text>
         <FlatList
@@ -53,11 +60,6 @@ const styles = StyleSheet.create({
   todosContainer: {
     backgroundColor: 'rgba(247,247,247,1.0)',
     minHeight: '100%',
-  },
-  todo: {
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: '#fff',
   },
   title: {
     textAlign: 'center',
